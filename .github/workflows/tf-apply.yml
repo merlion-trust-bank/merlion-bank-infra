@@ -1,0 +1,58 @@
+name: terraform-apply
+
+on:
+  push:
+    branches: [main]
+    paths: ["envs/**", "modules/**"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  TF_VERSION: "1.16.7"
+
+jobs:
+  apply-staging:
+    name: apply (staging)
+    runs-on: ubuntu-latest
+    environment: staging
+    concurrency: tf-staging
+    defaults:
+      run:
+        working-directory: envs/staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+      - run: terraform init -input=false
+      - run: terraform plan -input=false -out=tfplan
+      - run: terraform apply -input=false tfplan
+
+  apply-prod:
+    name: apply (production, after approval)
+    needs: apply-staging
+    runs-on: ubuntu-latest
+    environment: production        # required reviewer gate
+    concurrency: tf-prod
+    defaults:
+      run:
+        working-directory: envs/prod
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+      - run: terraform init -input=false
+      - run: terraform plan -input=false -out=tfplan
+      - run: terraform apply -input=false tfplan

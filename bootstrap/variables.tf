@@ -32,3 +32,9 @@ variable "github_repos" {
   type        = list(string)
   default     = ["merlion-bank-infra", "merlion-bank-app"]
 }
+
+variable "audit_retention_mode" {
+  description = "Object Lock mode for audit logs. GOVERNANCE (instructor advice); bypass denied by bucket policy."
+  type        = string
+  default     = "GOVERNANCE"
+}

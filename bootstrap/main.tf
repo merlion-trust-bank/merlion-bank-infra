@@ -91,3 +91,11 @@ module "gha_prod" {
   state_bucket             = aws_s3_bucket.tfstate.bucket
   github_subjects          = [for r in var.github_repos : "repo:${var.github_org}/${r}:environment:production"]
 }
+
+# ---------- Audit trail: CloudTrail -> Object Lock bucket (INF-10) ----------
+module "audit" {
+  source         = "../modules/audit"
+  owner          = var.owner
+  retention_mode = var.audit_retention_mode
+  retention_days = 365
+}

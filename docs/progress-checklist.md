@@ -3,7 +3,7 @@
 Every ticket in [task-breakdown.md](task-breakdown.md), in **execution order** (dependencies first).
 Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-bank-app` · AWS: course account (`students/ce13/kealeee`), `us-east-1`
 
-**Progress: 13 / 46 · Current ticket → INF-06 (EKS)**
+**Progress: 14 / 46 · Current ticket → INF-13 (infra pipeline)**
 
 ---
 
@@ -61,7 +61,7 @@ Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-ba
 | [ ] | DO2 | **INF-08** ECR | infra | Terraform `modules/ecr`: one repo per service, immutable, scan on push | 7 repos `kean-*` |
 | [ ] | DO2 | **DOC-12** ADR-007 Promotion | infra | Build once, promote the same digest | ADR merged |
 | [ ] | DO2 | **INF-09** Secrets | infra | Terraform `modules/secrets`: DB creds (RDS-managed) + JWT key pair in Secrets Manager | Secrets exist, KMS-encrypted |
-| [ ] | DO1 | **INF-12** Env roots | infra | `envs/staging` + `envs/prod` wiring modules (remove `envs/dev`), S3 backend with `use_lockfile` | `terraform plan` per env from the remote backend |
+| [x] | DO1 | **INF-12** Env roots | infra | `envs/staging` + `envs/prod` wiring modules (remove `envs/dev`), S3 backend with `use_lockfile` | `terraform plan` per env from the remote backend |
 | [ ] | DO2 | **INF-13** Infra pipeline | infra | GitHub Actions: PR → fmt / validate / tflint / checkov / plan comment; main → apply staging → approval → prod (OIDC) | A PR shows a plan comment; a failing checkov blocks it |
 
 ## Phase 3 – Application delivery

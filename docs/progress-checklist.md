@@ -3,7 +3,7 @@
 Individual run of every ticket in [task-breakdown.md](task-breakdown.md), in **execution order** (dependencies first).
 Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-bank-app` · AWS: course account (`students/ce13/kealeee`), `us-east-1`
 
-**Progress: 3 / 46 · Current ticket → DOC-11 (ADR-006 region)**
+**Progress: 5 / 46 · Current ticket → DOC-07 (ADR-002 accounts)**
 
 ---
 
@@ -42,8 +42,8 @@ Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-ba
 | [x] | DO1 | **INF-01** Repo setup | infra | `.gitignore`, CODEOWNERS, PR template, pre-commit + gitleaks, folder skeleton, README | PR merged; gitleaks blocks a fake secret · ✅ PR #2 merged (`f47666a`) |
 | [x] | DO1 | **INF-02** Bootstrap | infra | Terraform: S3 state bucket (versioned, KMS, TLS-only), GitHub OIDC provider (create or reuse) | `apply` succeeds; bucket + OIDC ARN in outputs · ✅ 5 added; `kean-merlion-tfstate-255945442255` (us-east-1); OIDC reused |
 | [x] | SA | **DOC-01** Requirements | infra | Functional / non-functional requirements, constraints, assumptions (incl. region directive, solo adaptations) | `docs/requirements.md` merged |
-| [ ] | SA | **DOC-11** ADR-006 Region | infra | Why `us-east-1` instead of Singapore; region is a single variable | `docs/adr/006-region.md` merged |
-| [ ] | SA | **DOC-06** ADR-001 Runtime | infra | EKS vs ECS: decision + consequences | ADR merged |
+| [x] | SA | **DOC-11** ADR-006 Region | infra | Why `us-east-1` instead of Singapore; region is a single variable | `docs/adr/006-region.md` merged |
+| [x] | SA | **DOC-06** ADR-001 Runtime | infra | EKS vs ECS: decision + consequences | ADR merged |
 | [ ] | DO1 | **DOC-07** ADR-002 Accounts | infra | Team: 3 accounts. Solo: 1 account, separation by state / role / prefix; trade-offs | ADR merged |
 | [ ] | DO1 | **INF-03** OIDC roles | infra | Terraform `modules/iam-ci`: `gha-dev`, `gha-prod` roles trusting only your repo + GitHub environment; least-privilege policies | Roles exist; trust policy shows `repo:` and `environment:` conditions |
 | [ ] | DO1 | **DOC-10** ADR-005 OIDC | infra | Short-lived creds, no static keys | ADR merged |

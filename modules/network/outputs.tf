@@ -1,0 +1,25 @@
+output "vpc_id" {
+  value = aws_vpc.this.id
+}
+
+output "vpc_cidr" {
+  value = aws_vpc.this.cidr_block
+}
+
+output "public_subnet_ids" {
+  value = aws_subnet.public[*].id
+}
+
+output "private_subnet_ids" {
+  description = "EKS nodes and pods."
+  value       = aws_subnet.private[*].id
+}
+
+output "db_subnet_ids" {
+  description = "Isolated: no internet route. For the RDS subnet group."
+  value       = aws_subnet.db[*].id
+}
+
+output "nat_gateway_count" {
+  value = local.nat_count
+}

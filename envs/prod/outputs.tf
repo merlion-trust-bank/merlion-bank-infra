@@ -1,0 +1,19 @@
+output "environment" {
+  value = local.environment
+}
+
+output "vpc_id" {
+  value = module.network.vpc_id
+}
+
+output "private_subnet_ids" {
+  value = module.network.private_subnet_ids
+}
+
+output "db_subnet_ids" {
+  value = module.network.db_subnet_ids
+}
+
+output "kms_key_arns" {
+  value = module.kms.key_arns
+}

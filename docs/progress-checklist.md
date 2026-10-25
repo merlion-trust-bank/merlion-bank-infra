@@ -1,25 +1,24 @@
-# Merlion Trust Bank – Solo Build Checklist
+# Merlion Trust Bank – Build Checklist
 
-Individual run of every ticket in [task-breakdown.md](task-breakdown.md), in **execution order** (dependencies first).
+Every ticket in [task-breakdown.md](task-breakdown.md), in **execution order** (dependencies first).
 Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-bank-app` · AWS: course account (`students/ce13/kealeee`), `us-east-1`
 
 **Progress: 11 / 46 · Current ticket → DOC-09 (ADR-004 audit)**
 
 ---
 
-**Roles:** SA = Solutions Architect · DO1 = DevSecOps 1 (infra foundations) · DO2 = DevSecOps 2 (data services + pipelines) · SRE = Site Reliability Engineer. Solo: you play the role shown.
+**Roles:** SA = Solutions Architect · DO1 = DevSecOps 1 (infra foundations) · DO2 = DevSecOps 2 (data services + pipelines) · SRE = Site Reliability Engineer. One engineer wears every hat; the role shows which hat.
 
-## Solo adaptations
+## Project conventions
 
-| Team plan | Solo version |
+| Topic | Convention |
 |---|---|
-| 4 roles | You play every role |
-| 3 AWS accounts | 1 shared course account; environments separated by **state key + `kean-` name prefix + per-env IAM role** |
-| 3 environments (dev, staging, prod) | **2 environments: `staging` + `prod`** (team and individual, ADR-002); staging is smaller and scaled down when idle |
-| DynamoDB state lock | S3 native lockfile (`use_lockfile = true`, Terraform ≥ 1.10) |
-| Teammate approval | Self-merge (required approvals = 0 in the individual repo only) |
-| Org-wide CloudTrail | If the student role can't create trails, use a `kean-` trail on the account, or document the instructor's trail as the evidence |
-| All infra | **Terraform only, checked in.** CLI for read-only checks |
+| AWS account | One shared course account (`us-east-1`); every resource prefixed `kean-` |
+| Environments | `staging` + `prod`, separated by `Environment` tag, Terraform state key and per-environment CI role (ADR-002) |
+| State locking | S3 native lockfile (`use_lockfile = true`, Terraform ≥ 1.10) |
+| Reviews | PR template completed and self-reviewed before merge (required approvals = 0) |
+| Audit | Account trail `kean-merlion-trail` to an Object Lock bucket (governance, 365 days) |
+| Infrastructure | **Terraform only, checked in.** CLI for read-only checks |
 
 ## Every ticket's check-in routine
 
@@ -41,10 +40,10 @@ Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-ba
 |---|---|---|---|---|---|
 | [x] | DO1 | **INF-01** Repo setup | infra | `.gitignore`, CODEOWNERS, PR template, pre-commit + gitleaks, folder skeleton, README | PR merged; gitleaks blocks a fake secret · ✅ PR #2 merged (`f47666a`) |
 | [x] | DO1 | **INF-02** Bootstrap | infra | Terraform: S3 state bucket (versioned, KMS, TLS-only), GitHub OIDC provider (create or reuse) | `apply` succeeds; bucket + OIDC ARN in outputs · ✅ 5 added; `kean-merlion-tfstate-255945442255` (us-east-1); OIDC reused |
-| [x] | SA | **DOC-01** Requirements | infra | Functional / non-functional requirements, constraints, assumptions (incl. region directive, solo adaptations) | `docs/requirements.md` merged |
+| [x] | SA | **DOC-01** Requirements | infra | Functional / non-functional requirements, constraints, assumptions (incl. region directive) | `docs/requirements.md` merged |
 | [x] | SA | **DOC-11** ADR-006 Region | infra | Why `us-east-1` instead of Singapore; region is a single variable | `docs/adr/006-region.md` merged |
 | [x] | SA | **DOC-06** ADR-001 Runtime | infra | EKS vs ECS: decision + consequences | ADR merged |
-| [x] | DO1 | **DOC-07** ADR-002 Accounts | infra | Two environments (staging + prod). Team: 1 account each. Solo: 1 shared account, separation by state / role / tag / prefix | ADR merged |
+| [x] | DO1 | **DOC-07** ADR-002 Accounts | infra | Two environments (staging + prod) in one shared account, isolated by tag / state / role / prefix | ADR merged |
 | [x] | DO1 | **INF-03** OIDC roles | infra | Terraform `modules/iam-ci`: `gha-staging`, `gha-prod` roles trusting only your repo + GitHub environment; least-privilege policies | Roles exist; trust policy shows `repo:` and `environment:` conditions |
 | [x] | DO1 | **DOC-10** ADR-005 OIDC | infra | Short-lived creds, no static keys | ADR merged |
 | [x] | DO2 | **INF-04** KMS | infra | Terraform `modules/kms`: CMKs for RDS, S3, logs, secrets, rotation on | Keys + aliases `alias/kean-*` · module merged; applied with env roots (INF-12) |
@@ -54,8 +53,8 @@ Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-ba
 
 | ✓ | Role | Ticket | Repo | What you do (essence) | Done when |
 |---|---|---|---|---|---|
-| [x] | SA | **INF-10** Audit | infra | Terraform `modules/audit`: S3 Object Lock bucket (compliance, 365 d) + CloudTrail | Bucket shows Object Lock; trail logging |
-| [ ] | SA | **DOC-09** ADR-004 Audit | infra | Why compliance mode; cost note (same as governance) | ADR merged |
+| [x] | SA | **INF-10** Audit | infra | Terraform `modules/audit`: S3 Object Lock bucket (governance, 365 d, bypass denied) + CloudTrail | Bucket shows Object Lock; trail logging |
+| [ ] | SA | **DOC-09** ADR-004 Audit | infra | Why governance mode + denied bypass (instructor advice) vs compliance; cost the same | ADR merged |
 | [ ] | SA | **INF-11** Region guardrail | infra | `var.region` everywhere; deny-other-regions policy on CI roles | Policy attached; `plan` shows it |
 | [ ] | DO1 | **INF-06** EKS | infra | Terraform `modules/eks`: cluster, managed node group (small), IRSA, control-plane audit logs | `kubectl get nodes` Ready |
 | [ ] | DO2 | **INF-07** RDS | infra | Terraform `modules/rds`: `accounts-db`, `ledger-db` in isolated subnets, KMS, backups, `force_ssl`; single-AZ in staging, Multi-AZ in prod | Both DBs available, not publicly accessible |

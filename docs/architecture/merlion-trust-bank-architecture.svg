@@ -31,19 +31,19 @@
 
 <!-- Region boundary -->
 <rect x="355" y="88" width="1220" height="967" rx="6" fill="none" stroke="#B8323A" stroke-width="1.8" stroke-dasharray="8 5"/>
-<text x="965" y="115" text-anchor="middle" font-size="15" font-weight="600" fill="#B8323A">AWS us-east-1 (N. Virginia) · all customer data, backups and logs at rest</text>
+<text x="965" y="115" text-anchor="middle" font-size="15" font-weight="600" fill="#B8323A">AWS us-east-1 · one shared account (prefix kean-) · all customer data, backups and logs at rest</text>
 
 <!-- ===== Left column: delivery ===== -->
 <text class="m" x="30" y="108" font-size="12">DELIVERY · OUTSIDE AWS</text>
 
 <rect class="box" x="30" y="125" width="300" height="58" rx="4"/>
-<text class="t" x="45" y="149">Developers</text>
-<text class="s" x="45" y="170">branch SCRUM-&lt;n&gt;-*, PR to main</text>
+<text class="t" x="45" y="149">Engineer</text>
+<text class="s" x="45" y="170">branch &lt;ticket-id&gt;-*, PR to main</text>
 <line class="arr" x1="180" y1="183" x2="180" y2="203" marker-end="url(#a)"/>
 
 <rect class="box" x="30" y="205" width="300" height="250" rx="4"/>
-<text class="t" x="45" y="229">GitHub · merlion-trust-bank-sg</text>
-<text class="s" x="45" y="249">Branch protection · 1 review · Jira SCRUM</text>
+<text class="t" x="45" y="229">GitHub · merlion-trust-bank</text>
+<text class="s" x="45" y="249">Branch protection · PR template · gitleaks</text>
 <rect class="box" x="45" y="262" width="270" height="85" rx="4"/>
 <text class="t2" x="58" y="282">merlion-bank-app</text>
 <text class="s" x="58" y="301">build → SCA → image scan → ECR</text>
@@ -66,8 +66,8 @@
 <text class="s" x="45" y="608">Short-lived creds, no stored keys</text>
 <line class="rarr" x1="330" y1="592" x2="378" y2="592" marker-end="url(#r)"/>
 
-<text class="s" x="30" y="645">gha-staging → staging account only</text>
-<text class="s" x="30" y="665">gha-prod → prod account, after approval</text>
+<text class="s" x="30" y="645">kean-gha-staging → staging resources only</text>
+<text class="s" x="30" y="665">kean-gha-prod → prod, after approval</text>
 
 <text class="m" x="30" y="705" font-size="12">NOTE</text>
 <text class="s" x="30" y="725">CI run logs are stored by GitHub,</text>
@@ -80,7 +80,7 @@
 
 <!-- ===== Production account ===== -->
 <rect class="frame" x="380" y="130" width="780" height="590" rx="4"/>
-<text class="t" x="1145" y="152" text-anchor="end">Production account · VPC across 2 AZs (us-east-1a / 1b)</text>
+<text class="t" x="1145" y="152" text-anchor="end">Production (Environment=prod) · VPC across 2 AZs (us-east-1a / 1b)</text>
 
 <!-- Public subnets -->
 <rect class="band" x="400" y="165" width="740" height="88"/>
@@ -159,9 +159,9 @@
 
 <!-- ===== Right column ===== -->
 <rect class="frame" x="1180" y="130" width="380" height="250" rx="4"/>
-<text class="t" x="1195" y="154">Non-production · separate account</text>
+<text class="t" x="1195" y="154">Non-production · same AWS account</text>
 <rect class="box" x="1195" y="168" width="350" height="140" rx="4"/>
-<text class="t" x="1208" y="190">Staging account</text>
+<text class="t" x="1208" y="190">Staging (Environment=staging)</text>
 <text class="s" x="1208" y="211">Same Terraform modules, smaller sizes</text>
 <text class="s" x="1208" y="229">EKS + RDS single-AZ</text>
 <text class="s" x="1208" y="247">Auto-deploy on merge to main + smoke tests</text>
@@ -174,7 +174,7 @@
 <text class="t" x="1195" y="424">Production platform services</text>
 <rect class="box" x="1195" y="438" width="350" height="50" rx="4"/>
 <text class="t" x="1208" y="458">Amazon ECR</text>
-<text class="s" x="1208" y="477">Immutable tags · scan on push · cross-account pull</text>
+<text class="s" x="1208" y="477">Immutable tags · scan on push · same digest promoted</text>
 <rect class="box" x="1195" y="498" width="350" height="50" rx="4"/>
 <text class="t" x="1208" y="518">Secrets Manager</text>
 <text class="s" x="1208" y="537">DB creds, JWT key pair → pods (External Secrets)</text>
@@ -182,9 +182,9 @@
 <text class="t" x="1208" y="578">AWS KMS</text>
 <text class="s" x="1208" y="597">CMKs for RDS, S3, logs, secrets</text>
 <rect class="red" x="1195" y="618" width="350" height="90" rx="4"/>
-<text class="t" x="1208" y="640">gha-prod role + Terraform state</text>
+<text class="t" x="1208" y="640">kean-gha-prod role + Terraform state</text>
 <text class="s" x="1208" y="660">Trust: repo + environment production only</text>
-<text class="s" x="1208" y="678">State: S3 per account · versioned · KMS</text>
+<text class="s" x="1208" y="678">State: S3 envs/&lt;env&gt;/ · versioned · KMS</text>
 
 <!-- ===== Observability ===== -->
 <line class="arr" x1="600" y1="560" x2="600" y2="776"/>
@@ -204,7 +204,7 @@
 <rect class="box" x="774" y="790" width="172" height="70" rx="4"/>
 <text class="t" x="786" y="812">Grafana</text>
 <text class="s" x="786" y="832">Health, SLOs, logs</text>
-<text class="s" x="786" y="850">for non-team viewers</text>
+<text class="s" x="786" y="850">for non-engineers too</text>
 <rect class="red" x="961" y="790" width="172" height="70" rx="4"/>
 <text class="t" x="973" y="812">Alertmanager</text>
 <text class="s" x="973" y="832">SLO rules: avail., p95</text>
@@ -222,12 +222,12 @@
 <rect class="frame" x="1180" y="740" width="380" height="300" rx="4"/>
 <text class="t" x="1195" y="764">Audit · tamper-resistant</text>
 <rect class="box" x="1195" y="780" width="350" height="58" rx="4"/>
-<text class="t" x="1208" y="802">CloudTrail (both accounts)</text>
+<text class="t" x="1208" y="802">CloudTrail (multi-region trail)</text>
 <text class="s" x="1208" y="822">Every API call, incl. OIDC role sessions</text>
 <line class="arr" x1="1370" y1="838" x2="1370" y2="866" marker-end="url(#a)"/>
 <rect class="red" x="1195" y="868" width="350" height="58" rx="4"/>
 <text class="t" x="1208" y="890">S3 Object Lock bucket (log-archive)</text>
-<text class="s" x="1208" y="910">Compliance mode · 1-year retention</text>
+<text class="s" x="1208" y="910">Governance mode · 1 year · bypass denied</text>
 <text class="s" x="1195" y="960">Also stores EKS audit logs (via Firehose)</text>
 <text class="s" x="1195" y="978">and pipeline deploy records (who, what, when).</text>
 

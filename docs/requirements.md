@@ -27,19 +27,19 @@ features are not in scope; the platform around it is.
 | NFR-4 | Recovery | RPO ≤ 24 h, RTO ≤ 4 h (automated RDS backups) | Assumed bank standard for an enquiry portal |
 | NFR-5 | Scale | Baseline load from the Bank of Anthos load generator; frontend ≥ 2 replicas with HPA | Synthetic traffic only |
 | NFR-6 | Security | Encryption at rest (KMS) and in transit (TLS); databases not publicly reachable | Regulated data |
-| NFR-7 | Cost | Smallest viable sizes; non-prod scaled down when idle; teardown after demos | Course budget |
+| NFR-7 | Cost | Smallest viable sizes; staging scaled down when idle; teardown after demos | Course budget |
 
 ## 4. Hard constraints (Use Case A)
 | ID | Constraint | Our interpretation |
 |---|---|---|
 | HC-1 | **Data residency**: customer data, backups and application logs at rest in one approved region | Brief names `ap-southeast-1`; instructor directive is **`us-east-1`** (see ADR-006). No SaaS tool may store customer data or logs outside that region |
-| HC-2 | **Auditability**: every production change traceable (who, what, when, which pipeline); no direct console changes to prod | PR + review + pipeline run + approval + CloudTrail + deploy record |
-| HC-3 | **Audit log retention**: pipeline and infrastructure audit logs kept ≥ 1 year, tamper-proof from engineers | S3 Object Lock, compliance mode, 365 days |
+| HC-2 | **Auditability**: every production change traceable (who, what, when, which pipeline); no direct console changes to prod | PR + pipeline run + approval + CloudTrail + deploy record |
+| HC-3 | **Audit log retention**: pipeline and infrastructure audit logs kept ≥ 1 year, tamper-proof from engineers | S3 Object Lock (governance mode, bypass denied), 365 days |
 
-## 5. General requirements (all teams)
+## 5. General requirements
 - AWS only; **all infrastructure as code (Terraform)**, no click-ops
 - Distributed, multi-service containerised workload; runtime choice justified in an ADR
-- CI/CD to ≥ 2 environments, production gated by approval
+- CI/CD to 2 environments (staging, production), production gated by approval
 - Security gates in CI: dependency (SCA) and container image scanning with failing thresholds
 - Credential hygiene: per-environment roles, short-lived credentials (GitHub OIDC), no secrets in code
 - Centralised logging, metrics, dashboard, 2 SLOs, 2 live alerts, 1 incident runbook
@@ -49,7 +49,7 @@ features are not in scope; the platform around it is.
 |---|---|
 | A-1 | Region `us-east-1` replaces `ap-southeast-1` per instructor; region is one Terraform variable |
 | A-2 | Synthetic / sample data only; no real customer data |
-| A-3 | Individual build runs in the shared course AWS account; resources use the `kean-` prefix; environments are separated by Terraform state, name prefix and per-env IAM role (team build: separate accounts) |
+| A-3 | The platform runs in a shared course AWS account; every resource is prefixed `kean-`; staging and production are separated by `Environment` tag, Terraform state key and per-environment CI role (ADR-002) |
 | A-4 | Bank of Anthos source is used unmodified apart from configuration needed to reach RDS |
 | A-5 | GitHub-hosted runners are used; CI output contains no customer data or application logs |
 

@@ -13,8 +13,7 @@ credentials per environment, and requires that staging credentials cannot touch 
 ## Decision
 - GitHub Actions authenticates with **OIDC**: the workflow presents a signed token to AWS STS and
   receives **temporary credentials (≤ 1 hour)**. No AWS access keys are stored in GitHub.
-- One IAM role per environment: **`kean-gha-staging`** and **`kean-gha-prod`**
-  (team build: `gha-staging` / `gha-prod` in separate accounts).
+- One IAM role per environment: **`kean-gha-staging`** and **`kean-gha-prod`**.
 - **Trust policy** (who): `aud = sts.amazonaws.com` and `sub` restricted to our repos *and* the
   matching GitHub environment, e.g. `repo:merlion-trust-bank/merlion-bank-infra:environment:production`.
   The `production` environment requires a manual approval, so the prod role is only reachable after approval.
@@ -39,9 +38,9 @@ credentials per environment, and requires that staging credentials cannot touch 
 - A compromised staging workflow cannot assume the prod role and is denied on prod-tagged resources.
 
 **Negative / risks**
-- `PowerUserAccess` is broad. In the single shared account, separation relies on the Deny
+- `PowerUserAccess` is broad. In a single shared account, separation relies on the Deny
   statements and consistent `Environment` tags. Mitigation: tagging via provider `default_tags`,
-  checkov in CI, and an `AccessDenied` test. In the team build, separate accounts are the boundary.
+  checkov in CI, and an `AccessDenied` test.
 - Resources that don't support tags aren't covered by the tag-based Deny. Mitigation: name
   prefixes, and IAM limited to `kean-<env>-*`.
 

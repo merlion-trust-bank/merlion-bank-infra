@@ -20,3 +20,15 @@ variable "create_github_oidc_provider" {
   type        = bool
   default     = false
 }
+
+variable "github_org" {
+  description = "GitHub organisation that may assume the CI roles."
+  type        = string
+  default     = "merlion-trust-bank"
+}
+
+variable "github_repos" {
+  description = "Repos whose workflows may assume the CI roles."
+  type        = list(string)
+  default     = ["merlion-bank-infra", "merlion-bank-app"]
+}

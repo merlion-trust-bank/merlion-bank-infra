@@ -3,7 +3,7 @@
 Individual run of every ticket in [task-breakdown.md](task-breakdown.md), in **execution order** (dependencies first).
 Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-bank-app` · AWS: course account (`students/ce13/kealeee`), `us-east-1`
 
-**Progress: 7 / 46 · Current ticket → DOC-10 (ADR-005 OIDC)**
+**Progress: 8 / 46 · Current ticket → INF-04 (KMS)**
 
 ---
 
@@ -44,9 +44,9 @@ Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-ba
 | [x] | SA | **DOC-01** Requirements | infra | Functional / non-functional requirements, constraints, assumptions (incl. region directive, solo adaptations) | `docs/requirements.md` merged |
 | [x] | SA | **DOC-11** ADR-006 Region | infra | Why `us-east-1` instead of Singapore; region is a single variable | `docs/adr/006-region.md` merged |
 | [x] | SA | **DOC-06** ADR-001 Runtime | infra | EKS vs ECS: decision + consequences | ADR merged |
-| [x] | DO1 | **DOC-07** ADR-002 Accounts | infra | Team: 3 accounts. Solo: 1 account, separation by state / role / prefix; trade-offs | ADR merged |
-| [x] | DO1 | **INF-03** OIDC roles | infra | Terraform `modules/iam-ci`: `gha-staging`, `gha-prod` roles trusting only your repo + GitHub environment; least-privilege policies | Roles exist; trust policy shows `repo:` and `environment:` conditions |
-| [ ] | DO1 | **DOC-10** ADR-005 OIDC | infra | Short-lived creds, no static keys | ADR merged |
+| [ ] | DO1 | **DOC-07** ADR-002 Accounts | infra | Team: 3 accounts. Solo: 1 account, separation by state / role / prefix; trade-offs | ADR merged |
+| [ ] | DO1 | **INF-03** OIDC roles | infra | Terraform `modules/iam-ci`: `gha-staging`, `gha-prod` roles trusting only your repo + GitHub environment; least-privilege policies | Roles exist; trust policy shows `repo:` and `environment:` conditions |
+| [x] | DO1 | **DOC-10** ADR-005 OIDC | infra | Short-lived creds, no static keys | ADR merged |
 | [ ] | DO2 | **INF-04** KMS | infra | Terraform `modules/kms`: CMKs for RDS, S3, logs, secrets, rotation on | Keys + aliases `alias/kean-*` |
 | [ ] | DO1 | **INF-05** Network | infra | Terraform `modules/network`: VPC, 2 AZs, public / private / isolated-DB subnets, NAT, VPC endpoints | `plan` clean; `apply` only when EKS is next (NAT costs hourly) |
 

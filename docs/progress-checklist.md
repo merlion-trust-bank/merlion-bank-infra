@@ -3,7 +3,7 @@
 Every ticket in [task-breakdown.md](task-breakdown.md), in **execution order** (dependencies first).
 Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-bank-app` · AWS: course account (`students/ce13/kealeee`), `us-east-1`
 
-**Progress: 12 / 46 · Current ticket → INF-11 (region guardrail)**
+**Progress: 13 / 46 · Current ticket → INF-06 (EKS)**
 
 ---
 
@@ -55,7 +55,7 @@ Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-ba
 |---|---|---|---|---|---|
 | [x] | SA | **INF-10** Audit | infra | Terraform `modules/audit`: S3 Object Lock bucket (governance, 365 d, bypass denied) + CloudTrail | Bucket shows Object Lock; trail logging |
 | [x] | SA | **DOC-09** ADR-004 Audit | infra | Why governance mode + denied bypass (instructor advice) vs compliance; cost the same | ADR merged |
-| [ ] | SA | **INF-11** Region guardrail | infra | `var.region` everywhere; deny-other-regions policy on CI roles | Policy attached; `plan` shows it |
+| [x] | SA | **INF-11** Region guardrail | infra | `var.region` everywhere; deny-other-regions policy on CI roles | Policy attached; `plan` shows it |
 | [ ] | DO1 | **INF-06** EKS | infra | Terraform `modules/eks`: cluster, managed node group (small), IRSA, control-plane audit logs | `kubectl get nodes` Ready |
 | [ ] | DO2 | **INF-07** RDS | infra | Terraform `modules/rds`: `accounts-db`, `ledger-db` in isolated subnets, KMS, backups, `force_ssl`; single-AZ in staging, Multi-AZ in prod | Both DBs available, not publicly accessible |
 | [ ] | DO2 | **INF-08** ECR | infra | Terraform `modules/ecr`: one repo per service, immutable, scan on push | 7 repos `kean-*` |

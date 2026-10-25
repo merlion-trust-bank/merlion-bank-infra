@@ -118,3 +118,30 @@ resource "aws_iam_role_policy" "scoped" {
   role   = aws_iam_role.this.id
   policy = data.aws_iam_policy_document.scoped.json
 }
+
+# ---------- Region guardrail (INF-11): deny everything outside approved regions ----------
+data "aws_iam_policy_document" "region_guardrail" {
+  statement {
+    sid    = "DenyOutsideApprovedRegions"
+    effect = "Deny"
+    # Global services have no region (or report us-east-1); exempt so they keep working
+    not_actions = [
+      "iam:*", "sts:*", "organizations:*", "account:*", "support:*",
+      "budgets:*", "ce:*", "cur:*", "health:*", "pricing:*", "trustedadvisor:*",
+      "cloudfront:*", "route53:*", "route53domains:*", "globalaccelerator:*",
+      "waf:*", "shield:*",
+    ]
+    resources = ["*"]
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:RequestedRegion"
+      values   = var.allowed_regions
+    }
+  }
+}
+
+resource "aws_iam_role_policy" "region_guardrail" {
+  name   = "${local.role_name}-region-guardrail"
+  role   = aws_iam_role.this.id
+  policy = data.aws_iam_policy_document.region_guardrail.json
+}

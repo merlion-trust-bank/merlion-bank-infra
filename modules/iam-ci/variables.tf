@@ -26,3 +26,9 @@ variable "state_bucket" {
   description = "Terraform remote state bucket."
   type        = string
 }
+
+variable "allowed_regions" {
+  description = "Only regions where this CI role may act (HC-1 data residency)."
+  type        = list(string)
+  default     = ["us-east-1"]
+}

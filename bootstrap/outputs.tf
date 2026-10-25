@@ -23,3 +23,11 @@ output "gha_prod_role_arn" {
   description = "Assumed by workflows in GitHub environment 'production' (after approval)."
   value       = module.gha_prod.role_arn
 }
+
+output "audit_bucket" {
+  value = module.audit.audit_bucket
+}
+
+output "trail_arn" {
+  value = module.audit.trail_arn
+}

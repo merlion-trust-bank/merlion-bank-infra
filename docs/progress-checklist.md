@@ -3,7 +3,7 @@
 Individual run of every ticket in [task-breakdown.md](task-breakdown.md), in **execution order** (dependencies first).
 Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-bank-app` · AWS: course account (`students/ce13/kealeee`), `us-east-1`
 
-**Progress: 10 / 46 · Current ticket → INF-10 (audit)**
+**Progress: 11 / 46 · Current ticket → DOC-09 (ADR-004 audit)**
 
 ---
 
@@ -54,7 +54,7 @@ Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-ba
 
 | ✓ | Role | Ticket | Repo | What you do (essence) | Done when |
 |---|---|---|---|---|---|
-| [ ] | SA | **INF-10** Audit | infra | Terraform `modules/audit`: S3 Object Lock bucket (compliance, 365 d) + CloudTrail | Bucket shows Object Lock; trail logging |
+| [x] | SA | **INF-10** Audit | infra | Terraform `modules/audit`: S3 Object Lock bucket (compliance, 365 d) + CloudTrail | Bucket shows Object Lock; trail logging |
 | [ ] | SA | **DOC-09** ADR-004 Audit | infra | Why compliance mode; cost note (same as governance) | ADR merged |
 | [ ] | SA | **INF-11** Region guardrail | infra | `var.region` everywhere; deny-other-regions policy on CI roles | Policy attached; `plan` shows it |
 | [ ] | DO1 | **INF-06** EKS | infra | Terraform `modules/eks`: cluster, managed node group (small), IRSA, control-plane audit logs | `kubectl get nodes` Ready |

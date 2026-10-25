@@ -1,0 +1,46 @@
+# ADR-006: Deploy in us-east-1 instead of ap-southeast-1
+
+- **Status:** Accepted
+- **Date:** 2026-10-25
+- **Deciders:** Solutions Architect (with instructor approval)
+- **Related:** HC-1 Data residency (docs/requirements.md), assumption A-1
+
+## Context
+The Merlion Trust Bank use case (HC-1) requires all customer data, backups and application logs
+to remain at rest in `ap-southeast-1` (Singapore). Our instructor has directed the class to deploy
+in **`us-east-1`** (course AWS account, shared tooling and budget are set up there).
+
+The intent of HC-1 is **data residency**: customer data must not spread across regions or to
+third-party SaaS in other jurisdictions. That intent can be met in any single approved region.
+
+## Decision
+- Deploy everything in **`us-east-1`**, using two Availability Zones (`us-east-1a`, `us-east-1b`).
+- Treat HC-1 as **"all customer data, backups and logs stay in one approved region"**, with
+  `us-east-1` as the approved region for this course.
+- The region is a **single Terraform variable** (`var.region`) with a validation rule that rejects
+  any other value. Changing region is a one-line change plus a redeploy.
+- No cross-region replication: RDS automated backups and snapshots stay in-region; S3 buckets have
+  no cross-region replication; Loki log storage uses an S3 bucket in the same region.
+- No SaaS component stores customer data or logs (observability is self-hosted; see ADR-003).
+
+## Alternatives considered
+| Option | Why not chosen |
+|---|---|
+| Deploy in `ap-southeast-1` as the brief states | Conflicts with the instructor directive and the course account setup |
+| Split: data in `ap-southeast-1`, compute in `us-east-1` | Cross-region traffic and latency; data would still be processed outside the residency region; more cost and complexity |
+
+## Consequences
+**Positive**
+- Matches the course environment; no cross-account or cross-region workarounds.
+- Residency is still enforced: one region, validated in code, no replication, no SaaS log storage.
+- Moving to Singapore later needs only `var.region` changed (plus AZ names) and a redeploy.
+
+**Negative / risks**
+- Strictly, the brief's literal constraint (Singapore) is not met. Mitigation: this ADR records the
+  deviation and approval; the compliance mapping (DOC-04) shows the single-region evidence.
+- `us-east-1` is a busy region, and some services launch there first. No impact on this design.
+- AZ names are region-specific and must be updated if the region changes.
+
+## Evidence
+- `bootstrap/variables.tf`: `region` defaults to `us-east-1`, with a validation rule
+- State bucket `kean-merlion-tfstate-255945442255`: `get-bucket-location` returns `null` (= us-east-1)

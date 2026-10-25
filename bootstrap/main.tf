@@ -66,3 +66,28 @@ data "aws_iam_openid_connect_provider" "github" {
   count = var.create_github_oidc_provider ? 0 : 1
   url   = "https://token.actions.githubusercontent.com"
 }
+
+# ---------- CI roles: one per environment (INF-03) ----------
+locals {
+  github_oidc_arn = (var.create_github_oidc_provider
+    ? aws_iam_openid_connect_provider.github[0].arn
+  : data.aws_iam_openid_connect_provider.github[0].arn)
+}
+
+module "gha_staging" {
+  source                   = "../modules/iam-ci"
+  owner                    = var.owner
+  environment              = "staging"
+  github_oidc_provider_arn = local.github_oidc_arn
+  state_bucket             = aws_s3_bucket.tfstate.bucket
+  github_subjects          = [for r in var.github_repos : "repo:${var.github_org}/${r}:environment:staging"]
+}
+
+module "gha_prod" {
+  source                   = "../modules/iam-ci"
+  owner                    = var.owner
+  environment              = "prod"
+  github_oidc_provider_arn = local.github_oidc_arn
+  state_bucket             = aws_s3_bucket.tfstate.bucket
+  github_subjects          = [for r in var.github_repos : "repo:${var.github_org}/${r}:environment:production"]
+}

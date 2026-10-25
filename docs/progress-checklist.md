@@ -3,7 +3,7 @@
 Individual run of every ticket in [task-breakdown.md](task-breakdown.md), in **execution order** (dependencies first).
 Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-bank-app` · AWS: course account (`students/ce13/kealeee`), `us-east-1`
 
-**Progress: 8 / 46 · Current ticket → INF-04 (KMS)**
+**Progress: 9 / 46 · Current ticket → INF-05 (network)**
 
 ---
 
@@ -47,7 +47,7 @@ Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-ba
 | [x] | DO1 | **DOC-07** ADR-002 Accounts | infra | Two environments (staging + prod). Team: 1 account each. Solo: 1 shared account, separation by state / role / tag / prefix | ADR merged |
 | [x] | DO1 | **INF-03** OIDC roles | infra | Terraform `modules/iam-ci`: `gha-staging`, `gha-prod` roles trusting only your repo + GitHub environment; least-privilege policies | Roles exist; trust policy shows `repo:` and `environment:` conditions |
 | [x] | DO1 | **DOC-10** ADR-005 OIDC | infra | Short-lived creds, no static keys | ADR merged |
-| [ ] | DO2 | **INF-04** KMS | infra | Terraform `modules/kms`: CMKs for RDS, S3, logs, secrets, rotation on | Keys + aliases `alias/kean-*` |
+| [x] | DO2 | **INF-04** KMS | infra | Terraform `modules/kms`: CMKs for RDS, S3, logs, secrets, rotation on | Keys + aliases `alias/kean-*` · module merged; applied with env roots (INF-12) |
 | [ ] | DO1 | **INF-05** Network | infra | Terraform `modules/network`: VPC, 2 AZs, public / private / isolated-DB subnets, NAT, VPC endpoints | `plan` clean; `apply` only when EKS is next (NAT costs hourly) |
 
 ## Phase 2 – Platform

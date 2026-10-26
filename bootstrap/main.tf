@@ -5,10 +5,6 @@ locals {
 }
 
 # ---------- Terraform remote state (us-east-1) ----------
-# Accepted risk (AWS-0132): state uses SSE-KMS with the AWS-managed key, not a CMK.
-# Course account cleanup deletes CMKs nightly; a CMK here could make Terraform state unreadable.
-# Access is restricted by IAM (state prefixes per role), TLS-only bucket policy, no public access.
-#trivy:ignore:AWS-0132
 resource "aws_s3_bucket" "tfstate" {
   bucket = local.state_bucket
 
@@ -24,6 +20,10 @@ resource "aws_s3_bucket_versioning" "tfstate" {
   }
 }
 
+# Accepted risk (AWS-0132): state uses SSE-KMS with the AWS-managed key, not a CMK.
+# Course account cleanup deletes CMKs nightly; a CMK here could make Terraform state unreadable.
+# Access is restricted by IAM (state prefixes per role), TLS-only bucket policy, no public access.
+#trivy:ignore:AWS-0132
 resource "aws_s3_bucket_server_side_encryption_configuration" "tfstate" {
   bucket = aws_s3_bucket.tfstate.id
   rule {

@@ -84,7 +84,7 @@ module "gha_staging" {
   environment              = "staging"
   github_oidc_provider_arn = local.github_oidc_arn
   state_bucket             = aws_s3_bucket.tfstate.bucket
-  github_subjects          = [for r in var.github_repos : "repo:${var.github_org}/${r}:environment:staging"]
+  github_subjects          = [for p in local.gh_sub_prefixes : "${p}:environment:staging"]
 }
 
 module "gha_prod" {
@@ -93,7 +93,7 @@ module "gha_prod" {
   environment              = "prod"
   github_oidc_provider_arn = local.github_oidc_arn
   state_bucket             = aws_s3_bucket.tfstate.bucket
-  github_subjects          = [for r in var.github_repos : "repo:${var.github_org}/${r}:environment:production"]
+  github_subjects          = [for p in local.gh_sub_prefixes : "${p}:environment:production"]
 }
 
 # ---------- Audit trail: CloudTrail -> Object Lock bucket (INF-10) ----------
@@ -102,4 +102,13 @@ module "audit" {
   owner          = var.owner
   retention_mode = var.audit_retention_mode
   retention_days = 365
+}
+
+# GitHub may send the classic sub ("repo:ORG/REPO:...") or the immutable one
+# ("repo:ORG@ORG_ID/REPO@REPO_ID:..."). Trust both.
+locals {
+  gh_sub_prefixes = flatten([for r in var.github_repos : [
+    "repo:${var.github_org}/${r}",
+    "repo:${var.github_org}@${var.github_org_id}/${r}@${var.github_repo_ids[r]}",
+  ]])
 }

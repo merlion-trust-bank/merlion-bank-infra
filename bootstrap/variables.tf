@@ -38,3 +38,18 @@ variable "audit_retention_mode" {
   type        = string
   default     = "GOVERNANCE"
 }
+
+variable "github_org_id" {
+  description = "Numeric GitHub org ID (used by immutable OIDC subject claims)."
+  type        = number
+  default     = 337367504
+}
+
+variable "github_repo_ids" {
+  description = "Numeric GitHub repo IDs (used by immutable OIDC subject claims)."
+  type        = map(number)
+  default = {
+    "merlion-bank-infra" = 1403279696
+    "merlion-bank-app"   = 1403279963
+  }
+}

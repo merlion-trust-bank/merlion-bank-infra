@@ -11,11 +11,7 @@ module "kms" {
 }
 
 module "network" {
-  source                     = "../../modules/network"
-  owner                      = var.owner
-  environment                = local.environment
-  vpc_cidr                   = "10.30.0.0/16"
-  single_nat_gateway         = false
-  enable_interface_endpoints = true
-  eks_cluster_name           = local.cluster_name
+  # Shared course VPC (VPC quota is full in this account); looked up, not created
+  source   = "../../modules/network-lookup"
+  vpc_name = "sctp-vpc-ce13"
 }

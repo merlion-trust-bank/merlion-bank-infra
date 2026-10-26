@@ -17,3 +17,7 @@ output "db_subnet_ids" {
 output "kms_key_arns" {
   value = module.kms.key_arns
 }
+
+output "eks_cluster_name" {
+  value = module.eks.cluster_name
+}

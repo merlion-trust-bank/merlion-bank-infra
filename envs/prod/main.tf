@@ -25,3 +25,15 @@ module "eks" {
   logs_kms_key_arn     = module.kms.key_arns["logs"]
   admin_principal_arns = ["arn:aws:iam::255945442255:user/students/ce13/kealeee"]
 }
+
+module "rds" {
+  source                     = "../../modules/rds"
+  owner                      = var.owner
+  environment                = local.environment
+  vpc_id                     = module.network.vpc_id
+  db_subnet_ids              = module.network.db_subnet_ids
+  allowed_security_group_ids = [module.eks.cluster_security_group_id]
+  rds_kms_key_arn            = module.kms.key_arns["rds"]
+  secrets_kms_key_arn        = module.kms.key_arns["secrets"]
+  multi_az                   = true
+}

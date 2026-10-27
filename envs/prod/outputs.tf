@@ -21,3 +21,11 @@ output "kms_key_arns" {
 output "eks_cluster_name" {
   value = module.eks.cluster_name
 }
+
+output "db_endpoints" {
+  value = module.rds.endpoints
+}
+
+output "db_master_secret_arns" {
+  value = module.rds.master_secret_arns
+}

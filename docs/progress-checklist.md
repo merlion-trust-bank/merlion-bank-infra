@@ -3,7 +3,7 @@
 Every ticket in [task-breakdown.md](task-breakdown.md), in **execution order** (dependencies first).
 Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-bank-app` · AWS: course account (`students/ce13/kealeee`), `us-east-1`
 
-**Progress: 16 / 46 · Current ticket → INF-07 (RDS)**
+**Progress: 17 / 46 · Current ticket → INF-08 (ECR)**
 
 ---
 
@@ -57,7 +57,7 @@ Repos: `merlion-trust-bank/merlion-bank-infra` · `merlion-trust-bank/merlion-ba
 | [x] | SA | **DOC-09** ADR-004 Audit | infra | Why governance mode + denied bypass (instructor advice) vs compliance; cost the same | ADR merged |
 | [x] | SA | **INF-11** Region guardrail | infra | `var.region` everywhere; deny-other-regions policy on CI roles | Policy attached; `plan` shows it |
 | [x] | DO1 | **INF-06** EKS | infra | Terraform `modules/eks`: cluster, managed node group (small), IRSA, control-plane audit logs | `kubectl get nodes` Ready |
-| [ ] | DO2 | **INF-07** RDS | infra | Terraform `modules/rds`: `accounts-db`, `ledger-db` in isolated subnets, KMS, backups, `force_ssl`; single-AZ in staging, Multi-AZ in prod | Both DBs available, not publicly accessible |
+| [x] | DO2 | **INF-07** RDS | infra | Terraform `modules/rds`: `accounts-db`, `ledger-db` in isolated subnets, KMS, backups, `force_ssl`; single-AZ in staging, Multi-AZ in prod | Both DBs available, not publicly accessible |
 | [ ] | DO2 | **INF-08** ECR | infra | Terraform `modules/ecr`: one repo per service, immutable, scan on push | 7 repos `kean-*` |
 | [ ] | DO2 | **DOC-12** ADR-007 Promotion | infra | Build once, promote the same digest | ADR merged |
 | [ ] | DO2 | **INF-09** Secrets | infra | Terraform `modules/secrets`: DB creds (RDS-managed) + JWT key pair in Secrets Manager | Secrets exist, KMS-encrypted |

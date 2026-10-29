@@ -31,3 +31,7 @@ output "audit_bucket" {
 output "trail_arn" {
   value = module.audit.trail_arn
 }
+
+output "ecr_repository_urls" {
+  value = module.ecr.repository_urls
+}

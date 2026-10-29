@@ -112,3 +112,9 @@ locals {
     "repo:${var.github_org}@${var.github_org_id}/${r}@${var.github_repo_ids[r]}",
   ]])
 }
+
+# ---------- Container registry: one repo per service, shared by staging + prod (INF-08) ----------
+module "ecr" {
+  source = "../modules/ecr"
+  owner  = var.owner
+}
